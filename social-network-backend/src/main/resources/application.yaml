@@ -1,0 +1,99 @@
+spring:
+  server:
+    port: 8080
+    address: 0.0.0.0
+    tomcat:
+      accesslog:
+        enabled: false
+        directory: /app/logs/
+        pattern: "%h %{X-Forwarded-For}i %l %u %t \"%r\" %>s %b"
+    error:
+      include-stacktrace: on_trace_param
+  config:
+    import:
+      configserver: http://configserver:8888
+    enabled: false
+  cloud:
+    config:
+      enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 4QeFTrGo2u
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
+  application:
+    name: SocialNetworkBackendApplication
+  threads:
+    virtual:
+      enabled: false
+  liquibase:
+    change-log: liquibase/changeLog.xml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      group:
+        liveness:
+          include: livenessState
+      probes:
+        enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+    enabled: true
+
+server:
+  shutdown: graceful
+
+tracing:
+  url: http://localhost:4317/sampling
+
+token:
+  signing:
+    key: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+
+springdoc:
+  show-actuator: false
+  swagger-ui:
+    enabled: true
+    path: /
+    tryItOutEnabled: false
+    filter: true
+  api-docs:
+    groups:
+      enabled: true
+#  group-configs:
+#    - group: universal
+#      display-name: Universal
+#      paths-to-match:
+#        - /SmbpUniversal/*
+#    - group: scenarios
+#      display-name: Scenarios
+#      paths-to-match:
+#        - /ProcessEvent/*
+#        - /ExecuteScenario/*
+#    - group: actuator
+#      display-name: Actuator
+#      paths-to-match:
+#        - /actuator
+#        - /actuator/*
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+
+tracing:
+  url: http://10.97.141.31:30317/sampling
