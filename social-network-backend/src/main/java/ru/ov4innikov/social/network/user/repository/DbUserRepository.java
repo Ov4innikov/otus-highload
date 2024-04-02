@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Log4j2
 @Observed
@@ -26,7 +27,7 @@ public class DbUserRepository implements UserRepository {
 
     public static final RowMapper<User> USER_ROW_MAPPER = (resultSet, rowNum) ->
             User.builder()
-                    .id(resultSet.getLong("id"))
+                    .id(resultSet.getString("id"))
                     .firstName(resultSet.getString("first_name"))
                     .middleName(resultSet.getString("middle_name"))
                     .secondName(resultSet.getString("second_name"))
@@ -38,7 +39,7 @@ public class DbUserRepository implements UserRepository {
                     .build();
 
     @Override
-    public long save(User user) {
+    public String save(User user) {
         String sqlQuery = """
                 INSERT INTO sc.user(
                     first_name,
@@ -62,24 +63,24 @@ public class DbUserRepository implements UserRepository {
             stmt.setString(7, user.getPassword());
             return stmt;
         }, keyHolder);
-        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+        return keyHolder.getKeys().get("id").toString();
     }
 
     @Override
-    public User getById(long id) {
+    public User getById(String id) {
         return jdbcTemplate.queryForObject(
                 "SELECT * FROM sc.user WHERE id = ?",
                 USER_ROW_MAPPER,
-                id);
+                UUID.fromString(id));
+    }
+
+    @Override
+    public List<User> findUsersByFirstNameAndSecondName(String firstName, String secondName) {
+        return jdbcTemplate.query("SELECT * FROM sc.user WHERE first_name LIKE ? AND second_name LIKE ?", USER_ROW_MAPPER, firstName + "%", secondName + "%");
     }
 
     @Override
     public long clean() {
         return jdbcTemplate.update("TRUNCATE TABLE sc.user");
-    }
-
-    @Override
-    public List<User> findUsersByFirstNameAndSecondName(String firstName, String secondName) {
-        return jdbcTemplate.query("SELECT * FROM sc.user WHERE first_name LIKE ? AND second_name LIKE ?", USER_ROW_MAPPER, firstName, secondName);
     }
 }

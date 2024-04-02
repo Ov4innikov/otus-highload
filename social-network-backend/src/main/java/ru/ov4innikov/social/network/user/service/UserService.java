@@ -10,8 +10,6 @@ public interface UserService {
 
     User getById(String id);
 
-    ru.ov4innikov.social.network.user.model.User getById(long id);
-
     User getCurrentUser();
 
     void getAdmin();

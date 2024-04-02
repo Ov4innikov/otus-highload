@@ -37,26 +37,20 @@ public class BaseUserService implements UserService {
                 .city(userRegisterPostRequest.getCity().orElse(null))
                 .password(passwordEncoder.encode(userRegisterPostRequest.getPassword()))
                 .build();
-        long id = userRepository.save(user);
-        return new UserRegisterPost200Response().userId(String.valueOf(id));
+        return new UserRegisterPost200Response().userId(userRepository.save(user));
     }
 
     @Override
     public ru.ov4innikov.social.network.model.User getById(String id) {
-        User userFromDb = getById(Long.parseLong(id));
+        User userFromDb = userRepository.getById(id);
         return new ru.ov4innikov.social.network.model.User()
-                .id(String.valueOf(userFromDb.getId()))
+                .id(userFromDb.getId())
                 .firstName(userFromDb.getFirstName())
                 .middleName(userFromDb.getMiddleName())
                 .secondName(userFromDb.getSecondName())
                 .birthdate(userFromDb.getBirthdate())
                 .biography(userFromDb.getBiography())
                 .city(userFromDb.getCity());
-    }
-
-    @Override
-    public User getById(long id) {
-        return userRepository.getById(id);
     }
 
     @Override
@@ -77,7 +71,7 @@ public class BaseUserService implements UserService {
                 loginPostRequest.getPassword().get()
         ));
 
-        var user = getById(Long.parseLong(loginPostRequest.getId().get()));
+        var user = userRepository.getById(loginPostRequest.getId().get());
 
         var jwt = jwtService.generateToken(user);
         return new LoginPost200Response().token(jwt);

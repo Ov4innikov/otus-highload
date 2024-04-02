@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface UserRepository {
 
-    long save(User user);
+    String save(User user);
 
-    User getById(long id);
+    User getById(String id);
 
     long clean();
 

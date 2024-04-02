@@ -3,17 +3,24 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <property name="uuid_function" value="uid.uuid_generate_v4()" dbms="postgresql"/>
 
     <changeSet id="0" author="ov4innikov">
         <sql endDelimiter=";">
             CREATE SCHEMA IF NOT EXISTS sc
         </sql>
+        <sql endDelimiter=";">
+            CREATE EXTENSION IF NOT EXISTS "uuid-ossp"
+        </sql>
     </changeSet>
 
     <changeSet id="1" author="ov4innikov">
         <createTable schemaName="sc" tableName="user">
-            <column name="id" type="bigint" autoIncrement="true">
+            <column name="rowId" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="id" type="uuid" defaultValueComputed="uuid_generate_v4()">
+                <constraints unique="true" primaryKey="false" nullable="false"/>
             </column>
             <column name="first_name" type="varchar(255)">
                 <constraints nullable="false"/>
@@ -37,7 +44,11 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <createIndex schemaName="sc" tableName="user" indexName="user_id_hash_indx" unique="true">
+            <column name="id"/>
+        </createIndex>
         <rollback>
+            <dropIndex schemaName="sc" tableName="user" indexName="user_id_hash_indx"/>
             <dropTable schemaName="sc" tableName="user"/>
         </rollback>
     </changeSet>

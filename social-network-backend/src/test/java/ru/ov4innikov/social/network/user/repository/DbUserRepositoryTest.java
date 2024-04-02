@@ -66,7 +66,7 @@ class DbUserRepositoryTest {
                 .city("Тестинг")
                 .password("Пароль")
                 .build();
-        long id = userRepository.save(user);
+        String id = userRepository.save(user);
         User userByIdFromDb = userRepository.getById(id);
         log.info("User from db = {}", userByIdFromDb);
         assertNotNull(userByIdFromDb);

@@ -14,7 +14,8 @@ import java.util.List;
 @Builder
 public class User implements UserDetails {
 
-    private long id;
+    private long rowId;
+    private String id;
     private String firstName;
     private String middleName;
     private String secondName;
