@@ -17,6 +17,9 @@ spring:
     config:
       enabled: false
   datasource:
+    hikari:
+      maximum-pool-size: 50
+      max-lifetime: 30
     url: jdbc:postgresql://localhost:5432/postgres
     driver-class-name: org.postgresql.Driver
     username: postgres

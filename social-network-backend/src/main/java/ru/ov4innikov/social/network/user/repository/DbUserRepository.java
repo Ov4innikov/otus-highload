@@ -34,6 +34,8 @@ public class DbUserRepository implements UserRepository {
                     .birthdate(resultSet.getObject("birthdate", OffsetDateTime.class))
                     .biography(resultSet.getString("biography"))
                     .city(resultSet.getString("city"))
+                    .interests(resultSet.getString("interests"))
+                    .isMale(resultSet.getObject("is_male", Boolean.class))
                     .password(resultSet.getString("password"))
                     .role("ROLE_USER")
                     .build();
@@ -48,8 +50,10 @@ public class DbUserRepository implements UserRepository {
                     birthdate,
                     biography,
                     city,
+                    interests,
+                    is_male,
                     password)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
@@ -60,12 +64,15 @@ public class DbUserRepository implements UserRepository {
             stmt.setObject(4, user.getBirthdate());
             stmt.setString(5, user.getBiography());
             stmt.setString(6, user.getCity());
-            stmt.setString(7, user.getPassword());
+            stmt.setString(7, user.getInterests());
+            stmt.setObject(8, user.getIsMale());
+            stmt.setString(9, user.getPassword());
             return stmt;
         }, keyHolder);
         return keyHolder.getKeys().get("id").toString();
     }
 
+    @Cacheable("id")
     @Override
     public User getById(String id) {
         return jdbcTemplate.queryForObject(
@@ -76,7 +83,7 @@ public class DbUserRepository implements UserRepository {
 
     @Override
     public List<User> findUsersByFirstNameAndSecondName(String firstName, String secondName) {
-        return jdbcTemplate.query("SELECT * FROM sc.user WHERE first_name LIKE ? AND second_name LIKE ?", USER_ROW_MAPPER, firstName + "%", secondName + "%");
+            return jdbcTemplate.query("SELECT * FROM sc.user WHERE first_name LIKE ? AND second_name LIKE ? ORDER BY id", USER_ROW_MAPPER, firstName + "%", secondName + "%");
     }
 
     @Override

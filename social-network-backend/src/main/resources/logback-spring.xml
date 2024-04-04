@@ -33,29 +33,16 @@
 
     <!-- LOG everything at WARN level -->
     <root level="info">
-
         <appender-ref ref="Console"/>
     </root>
 
-    <logger name="ru.ov4innikov" level="trace" additivity="false">
+    <logger name="ru.ov4innikov" level="debug" additivity="false">
         <appender-ref ref="Console"/>
     </logger>
-    <logger name="org.springframework" level="debug" additivity="false">
+    <logger name="org.springframework" level="info" additivity="false">
         <appender-ref ref="Console"/>
     </logger>
-    <logger name="org.springframework.jdbc" level="trace" additivity="false">
-        <appender-ref ref="Console"/>
-    </logger>
-    <logger name="org.apache.hc.client5" level="trace" additivity="false">
-        <appender-ref ref="Console"/>
-    </logger>
-    <logger name="org.springframework.ws.client.MessageTracing" level="trace" additivity="false">
-        <appender-ref ref="Console"/>
-    </logger>
-    <logger name="org.springframework.data.mongodb.core.MongoTemplate" level="trace" additivity="false">
-        <appender-ref ref="Console"/>
-    </logger>
-    <logger name="org.springframework.amqp.rabbit.core" level="debug" additivity="false">
+    <logger name="org.springframework.jdbc" level="info" additivity="false">
         <appender-ref ref="Console"/>
     </logger>
 

@@ -26,19 +26,25 @@
                 <constraints nullable="false"/>
             </column>
             <column name="middle_name" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="second_name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="birthdate" type="timestamp">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="biography" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="city" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
+            </column>
+            <column name="interests" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="is_male" type="boolean">
+                <constraints nullable="true"/>
             </column>
             <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>

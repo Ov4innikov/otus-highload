@@ -92,11 +92,20 @@
                   },
                   "biography": {
                     "type": "string",
-                    "example": "Хобби, интересы и т.п."
+                    "example": "Биография",
+                    "description": "Биография"
                   },
                   "city": {
                     "type": "string",
                     "example": "Москва"
+                  },
+                  "interests": {
+                    "type": "string",
+                    "example": "Хобби, интересы и т.п.",
+                    "description": "Хобби, интересы и т.п."
+                  },
+                  "gender": {
+                    "$ref": "#/components/schemas/Gender"
                   },
                   "password": {
                     "type": "string",
@@ -716,13 +725,21 @@
           },
           "biography": {
             "type": "string",
-            "example": "Хобби, интересы и т.п.",
-            "description": "Интересы"
+            "example": "Биография",
+            "description": "Биография"
           },
           "city": {
             "type": "string",
             "example": "Москва",
             "description": "Город"
+          },
+          "interests": {
+            "type": "string",
+            "example": "Хобби, интересы и т.п.",
+            "description": "Хобби, интересы и т.п."
+          },
+          "gender": {
+            "$ref": "#/components/schemas/Gender"
           }
         }
       },
@@ -774,6 +791,14 @@
             "$ref": "#/components/schemas/UserId"
           }
         }
+      },
+      "Gender": {
+        "type": "string",
+        "enum": [
+          "MALE",
+          "FEMALE"
+        ],
+        "description": "Пол: мужской(male) или женский(female)"
       }
     },
     "securitySchemes": {

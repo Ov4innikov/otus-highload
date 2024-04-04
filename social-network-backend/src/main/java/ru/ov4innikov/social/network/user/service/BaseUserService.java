@@ -1,5 +1,6 @@
 package ru.ov4innikov.social.network.user.service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,14 +8,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.ov4innikov.social.network.model.LoginPost200Response;
-import ru.ov4innikov.social.network.model.LoginPostRequest;
-import ru.ov4innikov.social.network.model.UserRegisterPost200Response;
-import ru.ov4innikov.social.network.model.UserRegisterPostRequest;
+import ru.ov4innikov.social.network.model.*;
 import ru.ov4innikov.social.network.user.model.User;
 import ru.ov4innikov.social.network.user.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -35,6 +34,8 @@ public class BaseUserService implements UserService {
                 .birthdate(userRegisterPostRequest.getBirthdate().orElse(null))
                 .biography(userRegisterPostRequest.getBiography().orElse(null))
                 .city(userRegisterPostRequest.getCity().orElse(null))
+                .interests(userRegisterPostRequest.getInterests().orElse(null))
+                .isMale(userRegisterPostRequest.getGender().isEmpty() ? null : userRegisterPostRequest.getGender().get() == Gender.MALE)
                 .password(passwordEncoder.encode(userRegisterPostRequest.getPassword()))
                 .build();
         return new UserRegisterPost200Response().userId(userRepository.save(user));
@@ -43,14 +44,7 @@ public class BaseUserService implements UserService {
     @Override
     public ru.ov4innikov.social.network.model.User getById(String id) {
         User userFromDb = userRepository.getById(id);
-        return new ru.ov4innikov.social.network.model.User()
-                .id(userFromDb.getId())
-                .firstName(userFromDb.getFirstName())
-                .middleName(userFromDb.getMiddleName())
-                .secondName(userFromDb.getSecondName())
-                .birthdate(userFromDb.getBirthdate())
-                .biography(userFromDb.getBiography())
-                .city(userFromDb.getCity());
+        return convert(userFromDb);
     }
 
     @Override
@@ -80,13 +74,20 @@ public class BaseUserService implements UserService {
     @Override
     public List<ru.ov4innikov.social.network.model.User> searchUserByFirstNameAndSecondName(String firstName, String secondName) {
         List<User> usersByFirstNameAndSecondName = userRepository.findUsersByFirstNameAndSecondName(firstName, secondName);
-        return usersByFirstNameAndSecondName.stream().map(userFromDb -> new ru.ov4innikov.social.network.model.User()
-                .id(String.valueOf(userFromDb.getId()))
-                .firstName(userFromDb.getFirstName())
-                .middleName(userFromDb.getMiddleName())
-                .secondName(userFromDb.getSecondName())
-                .birthdate(userFromDb.getBirthdate())
-                .biography(userFromDb.getBiography())
-                .city(userFromDb.getCity())).toList();
+        return usersByFirstNameAndSecondName.stream().map(this::convert).toList();
+    }
+
+    private ru.ov4innikov.social.network.model.User convert(User userFromDb) {
+        ru.ov4innikov.social.network.model.User user = new ru.ov4innikov.social.network.model.User();
+        user.setId(Optional.of(userFromDb.getId()));
+        user.setFirstName(Optional.of(userFromDb.getFirstName()));
+        user.setMiddleName(Optional.ofNullable(userFromDb.getMiddleName()));
+        user.setSecondName(Optional.of(userFromDb.getSecondName()));
+        user.setBirthdate(Optional.ofNullable(userFromDb.getBirthdate()));
+        user.setBiography(Optional.ofNullable(userFromDb.getBiography()));
+        user.setCity(Optional.ofNullable(userFromDb.getCity()));
+        user.setInterests(Optional.ofNullable(userFromDb.getInterests()));
+        user.setGender(Optional.ofNullable(userFromDb.getIsMale() == null ? null : userFromDb.getIsMale() ? Gender.MALE : Gender.FEMALE));
+        return user;
     }
 }

@@ -22,6 +22,8 @@ public class User implements UserDetails {
     private OffsetDateTime birthdate;
     private String biography;
     private String city;
+    private String interests;
+    private Boolean isMale;
     private String password;
     private String role = "ROLE_USER";
 
@@ -29,9 +31,10 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));
     }
+
     @Override
     public String getUsername() {
-        return String.valueOf(id);
+        return id;
     }
 
     @Override

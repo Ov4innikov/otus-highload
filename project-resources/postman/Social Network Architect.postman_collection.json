@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "f18d21b4-d51d-47e2-a663-b99f12b97d56",
-		"name": "Social Network Architect",
+		"_postman_id": "5a6e4640-86a0-417e-bfbd-fa0898a3844c",
+		"name": "Social Network Backend",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "33657946"
 	},
@@ -25,7 +25,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"id\": \"3\",\n  \"password\": \"Секретное слово\"\n}",
+							"raw": "{\n  \"id\": \"<string>\",\n  \"password\": \"<string>\"\n}",
 							"options": {
 								"raw": {
 									"headerFamily": "json",
@@ -226,34 +226,6 @@
 							"body": "{\n  \"message\": \"<string>\",\n  \"requestId\": \"<string>\",\n  \"code\": \"<integer>\"\n}"
 						}
 					]
-				},
-				{
-					"name": "{{baseUrl}}/login",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"id\": \"3\",\n  \"password\": \"Секретная строка\"\n}",
-							"options": {
-								"raw": {
-									"headerFamily": "json",
-									"language": "json"
-								}
-							}
-						},
-						"url": "{{baseUrl}}/login"
-					},
-					"response": []
 				}
 			]
 		},
@@ -279,7 +251,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"password\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"middleName\": \"<string>\",\n  \"secondName\": \"<string>\",\n  \"birthdate\": \"<date>\",\n  \"biography\": \"<string>\",\n  \"city\": \"<string>\"\n}",
+									"raw": "{\n  \"password\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"middleName\": \"<string>\",\n  \"secondName\": \"<string>\",\n  \"birthdate\": \"<date>\",\n  \"biography\": \"<string>\",\n  \"city\": \"<string>\",\n  \"interests\": \"<string>\",\n  \"gender\": \"FEMALE\"\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -307,7 +279,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"password\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"middleName\": \"<string>\",\n  \"secondName\": \"<string>\",\n  \"birthdate\": \"<date>\",\n  \"biography\": \"<string>\",\n  \"city\": \"<string>\"\n}",
+											"raw": "{\n  \"password\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"middleName\": \"<string>\",\n  \"secondName\": \"<string>\",\n  \"birthdate\": \"<date>\",\n  \"biography\": \"<string>\",\n  \"city\": \"<string>\",\n  \"interests\": \"<string>\",\n  \"gender\": \"FEMALE\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -341,7 +313,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"password\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"middleName\": \"<string>\",\n  \"secondName\": \"<string>\",\n  \"birthdate\": \"<date>\",\n  \"biography\": \"<string>\",\n  \"city\": \"<string>\"\n}",
+											"raw": "{\n  \"password\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"middleName\": \"<string>\",\n  \"secondName\": \"<string>\",\n  \"birthdate\": \"<date>\",\n  \"biography\": \"<string>\",\n  \"city\": \"<string>\",\n  \"interests\": \"<string>\",\n  \"gender\": \"FEMALE\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -374,7 +346,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"password\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"middleName\": \"<string>\",\n  \"secondName\": \"<string>\",\n  \"birthdate\": \"<date>\",\n  \"biography\": \"<string>\",\n  \"city\": \"<string>\"\n}",
+											"raw": "{\n  \"password\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"middleName\": \"<string>\",\n  \"secondName\": \"<string>\",\n  \"birthdate\": \"<date>\",\n  \"biography\": \"<string>\",\n  \"city\": \"<string>\",\n  \"interests\": \"<string>\",\n  \"gender\": \"FEMALE\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -420,7 +392,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"password\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"middleName\": \"<string>\",\n  \"secondName\": \"<string>\",\n  \"birthdate\": \"<date>\",\n  \"biography\": \"<string>\",\n  \"city\": \"<string>\"\n}",
+											"raw": "{\n  \"password\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"middleName\": \"<string>\",\n  \"secondName\": \"<string>\",\n  \"birthdate\": \"<date>\",\n  \"biography\": \"<string>\",\n  \"city\": \"<string>\",\n  \"interests\": \"<string>\",\n  \"gender\": \"FEMALE\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -528,7 +500,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "{\n  \"id\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"middleName\": \"<string>\",\n  \"secondName\": \"<string>\",\n  \"birthdate\": \"<date>\",\n  \"biography\": \"<string>\",\n  \"city\": \"<string>\"\n}"
+											"body": "{\n  \"id\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"middleName\": \"<string>\",\n  \"secondName\": \"<string>\",\n  \"birthdate\": \"<date>\",\n  \"biography\": \"<string>\",\n  \"city\": \"<string>\",\n  \"interests\": \"<string>\",\n  \"gender\": \"MALE\"\n}"
 										},
 										{
 											"name": "Невалидные данные",
@@ -702,7 +674,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}/user/search?firstName=<string>&lastName=<string>",
+									"raw": "{{baseUrl}}/user/search?firstName=<string>&secondName=<string>",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -717,7 +689,7 @@
 											"description": "(Required) Условие поиска по имени"
 										},
 										{
-											"key": "lastName",
+											"key": "secondName",
 											"value": "<string>",
 											"description": "(Required) Условие поиска по фамилии"
 										}
@@ -737,7 +709,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUrl}}/user/search?firstName=<string>&lastName=<string>",
+											"raw": "{{baseUrl}}/user/search?firstName=<string>&secondName=<string>",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -752,7 +724,7 @@
 													"description": "(Required) Условие поиска по имени"
 												},
 												{
-													"key": "lastName",
+													"key": "secondName",
 													"value": "<string>",
 													"description": "(Required) Условие поиска по фамилии"
 												}
@@ -769,7 +741,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"id\": \"<string>\",\n    \"firstName\": \"<string>\",\n    \"middleName\": \"<string>\",\n    \"secondName\": \"<string>\",\n    \"birthdate\": \"<date>\",\n    \"biography\": \"<string>\",\n    \"city\": \"<string>\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"firstName\": \"<string>\",\n    \"middleName\": \"<string>\",\n    \"secondName\": \"<string>\",\n    \"birthdate\": \"<date>\",\n    \"biography\": \"<string>\",\n    \"city\": \"<string>\"\n  }\n]"
+									"body": "[\n  {\n    \"id\": \"<string>\",\n    \"firstName\": \"<string>\",\n    \"middleName\": \"<string>\",\n    \"secondName\": \"<string>\",\n    \"birthdate\": \"<date>\",\n    \"biography\": \"<string>\",\n    \"city\": \"<string>\",\n    \"interests\": \"<string>\",\n    \"gender\": \"FEMALE\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"firstName\": \"<string>\",\n    \"middleName\": \"<string>\",\n    \"secondName\": \"<string>\",\n    \"birthdate\": \"<date>\",\n    \"biography\": \"<string>\",\n    \"city\": \"<string>\",\n    \"interests\": \"<string>\",\n    \"gender\": \"MALE\"\n  }\n]"
 								},
 								{
 									"name": "Невалидные данные",
@@ -777,7 +749,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{baseUrl}}/user/search?firstName=<string>&lastName=<string>",
+											"raw": "{{baseUrl}}/user/search?firstName=<string>&secondName=<string>",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -792,7 +764,7 @@
 													"description": "(Required) Условие поиска по имени"
 												},
 												{
-													"key": "lastName",
+													"key": "secondName",
 													"value": "<string>",
 													"description": "(Required) Условие поиска по фамилии"
 												}
@@ -817,7 +789,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUrl}}/user/search?firstName=<string>&lastName=<string>",
+											"raw": "{{baseUrl}}/user/search?firstName=<string>&secondName=<string>",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -832,7 +804,7 @@
 													"description": "(Required) Условие поиска по имени"
 												},
 												{
-													"key": "lastName",
+													"key": "secondName",
 													"value": "<string>",
 													"description": "(Required) Условие поиска по фамилии"
 												}
@@ -870,7 +842,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUrl}}/user/search?firstName=<string>&lastName=<string>",
+											"raw": "{{baseUrl}}/user/search?firstName=<string>&secondName=<string>",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -885,7 +857,7 @@
 													"description": "(Required) Условие поиска по имени"
 												},
 												{
-													"key": "lastName",
+													"key": "secondName",
 													"value": "<string>",
 													"description": "(Required) Условие поиска по фамилии"
 												}
@@ -3323,7 +3295,7 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "/"
+			"value": "http://localhost:8080"
 		}
 	]
 }
