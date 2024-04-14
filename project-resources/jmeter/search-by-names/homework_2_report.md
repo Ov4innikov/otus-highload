@@ -3,19 +3,19 @@
 
 ### Без индекса
 Количество потоков
-![active_threads](./Response search active threads over time without index.png)
+![active_threads](./Response_search_active_threads_over_time_without_index.png)
 Latency
-![latencies](./Response search latencies without index.png)
+![latencies](./Response_search_latencies_without_index.png)
 Throughput
-![transactions_per_second](./Response search transactions per second without index.png)
+![transactions_per_second](./Response_search_transactions_per_second_without_index.png)
 
 ### С индексом
 Количество потоков
-![active_threads](./Response search active threads over time with index.png)
+![active_threads](./Response_search_active_threads_over_time_with_index.png)
 Latency
-![latencies](./Response search latencies with index.png)
+![latencies](./Response_search_latencies_with_index.png)
 Throughput
-![transactions_per_second](./Response search transactions per second with index.png)
+![transactions_per_second](./Response_search_transactions_per_second_with_index.png)
 
 ## Запрос добавления индекса
 create index first_name_btree_indx on sc."user" USING btree (first_name text_pattern_ops);
