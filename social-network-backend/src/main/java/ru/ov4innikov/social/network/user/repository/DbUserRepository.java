@@ -72,7 +72,6 @@ public class DbUserRepository implements UserRepository {
         return keyHolder.getKeys().get("id").toString();
     }
 
-    @Cacheable("id")
     @Override
     public User getById(String id) {
         return jdbcTemplate.queryForObject(
@@ -83,7 +82,7 @@ public class DbUserRepository implements UserRepository {
 
     @Override
     public List<User> findUsersByFirstNameAndSecondName(String firstName, String secondName) {
-            return jdbcTemplate.query("SELECT * FROM sc.user WHERE first_name LIKE ? AND second_name LIKE ? ORDER BY id", USER_ROW_MAPPER, firstName + "%", secondName + "%");
+            return jdbcTemplate.query("SELECT * FROM sc.user WHERE first_name LIKE ? AND second_name LIKE ?", USER_ROW_MAPPER, firstName + "%", secondName + "%");
     }
 
     @Override
