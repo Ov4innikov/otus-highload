@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  social-network-backend:
+    image: wolf2010502/social-network-backend
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      spring.datasource.url: jdbc:postgresql://postgres:5432/postgres
+      spring.datasource.username: postgres
+      spring.datasource.password: postgres
+
+networks:
+  default:
+    driver: bridge
