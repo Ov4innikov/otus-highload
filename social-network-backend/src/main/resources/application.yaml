@@ -24,7 +24,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: 4QeFTrGo2u
+    password: postgres
   jackson:
     default-property-inclusion: non_null
     serialization:

@@ -1,0 +1,8 @@
+master/*
+!master/postgresql.conf
+
+slave-one/*
+!slave-one/postgresql.conf
+
+slave-two/*
+!slave-two/postgresql.conf

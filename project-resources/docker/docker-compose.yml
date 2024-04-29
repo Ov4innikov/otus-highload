@@ -1,8 +1,9 @@
 version: '3'
 
 services:
-  postgres:
-    image: postgres:15
+  postgres-master:
+    image: 'bitnami/postgresql:16'
+    container_name: postgres-master
     restart: always
     ports:
       - 5432:5432
@@ -10,16 +11,62 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRESQL_REPLICATION_MODE: master
+      POSTGRESQL_REPLICATION_USER: repl_user
+      POSTGRESQL_REPLICATION_PASSWORD: repl_password
+      POSTGRESQL_SYNCHRONOUS_COMMIT_MODE: off
+      POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS: 0
+    volumes:
+      - ./postgres/master:/var/lib/postgresql/data
+  postgres-slave-one:
+    image: 'bitnami/postgresql:16'
+    container_name: postgres-slave-one
+    restart: always
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRESQL_REPLICATION_MODE: slave
+      POSTGRESQL_REPLICATION_USER: repl_user
+      POSTGRESQL_REPLICATION_PASSWORD: repl_password
+      POSTGRESQL_MASTER_HOST: postgres-master
+      POSTGRESQL_MASTER_PORT_NUMBER: 5432
+    volumes:
+      - ./postgres/slave-one:/var/lib/postgresql/data
+  postgres-slave-two:
+    image: 'bitnami/postgresql:16'
+    container_name: postgres-slave-two
+    restart: always
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRESQL_REPLICATION_MODE: slave
+      POSTGRESQL_REPLICATION_USER: repl_user
+      POSTGRESQL_REPLICATION_PASSWORD: repl_password
+      POSTGRESQL_MASTER_HOST: postgres-master
+      POSTGRESQL_MASTER_PORT_NUMBER: 5432
+    volumes:
+      - ./postgres/slave-two:/var/lib/postgresql/data
   social-network-backend:
     image: wolf2010502/social-network-backend
+    container_name: social-network-backend
     restart: always
     ports:
       - 8080:8080
     environment:
-      spring.datasource.url: jdbc:postgresql://postgres:5432/postgres
+      spring.datasource.url: jdbc:postgresql://postgres-master:5432/postgres
       spring.datasource.username: postgres
       spring.datasource.password: postgres
 
 networks:
   default:
     driver: bridge
+
+volumes:
+  db:
+    driver: local
