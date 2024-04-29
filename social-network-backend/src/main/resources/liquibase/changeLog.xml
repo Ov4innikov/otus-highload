@@ -57,5 +57,20 @@
             <dropIndex schemaName="sc" tableName="user" indexName="user_id_hash_indx"/>
             <dropTable schemaName="sc" tableName="user"/>
         </rollback>
+
+        <createTable schemaName="sc" tableName="post">
+            <column name="rowId" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="id" type="uuid" defaultValueComputed="uuid_generate_v4()">
+                <constraints unique="true" primaryKey="false" nullable="false"/>
+            </column>
+            <column name="author_user_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>
