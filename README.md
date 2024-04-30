@@ -5,6 +5,7 @@
 1. Для запуска нужны JRE 21, mvn и docker.
 2. Образ приложения выложен в Docker Hub - wolf2010502/social-network-backend:latest
 3. Запустите проект с необходимыми зависимостями запустив docker compose файл - [docker-compose](./project-resources/docker/docker-compose.yml)
+4. У сервиса есть свагер - http://localhost:8080/swagger-ui/index.html#
 
 ## Описание домашних заданий
 
