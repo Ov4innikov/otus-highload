@@ -3,6 +3,7 @@ package ru.ov4innikov.social.network.user.repository;
 import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -70,6 +71,7 @@ public class DbUserRepository implements UserRepository {
         return keyHolder.getKeys().get("id").toString();
     }
 
+    @Cacheable("userGetById")
     @Override
     public User getById(String id) {
         return jdbcTemplate.queryForObject(

@@ -16,7 +16,7 @@
 
     <changeSet id="1" author="ov4innikov">
         <createTable schemaName="sc" tableName="user">
-            <column name="rowId" type="bigint" autoIncrement="true">
+            <column name="row_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="id" type="uuid" defaultValueComputed="uuid_generate_v4()">
@@ -59,7 +59,7 @@
         </rollback>
 
         <createTable schemaName="sc" tableName="post">
-            <column name="rowId" type="bigint" autoIncrement="true">
+            <column name="row_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="id" type="uuid" defaultValueComputed="uuid_generate_v4()">
