@@ -1,6 +1,6 @@
 package ru.ov4innikov.social.network.post.repository;
 
-import ru.ov4innikov.social.network.model.Post;
+import ru.ov4innikov.social.network.post.model.Post;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,7 +13,9 @@ public interface PostRepository {
 
     List<Post> getFeed(Long offset, Long limit);
 
-    List<Post> getFeed(String currentUserId, boolean forceUpdate);
+    List<Post> getFeed(String currentUserId);
+
+    List<Post> getFeedForce(String currentUserId);
 
     Post getById(String id);
 

@@ -11,7 +11,9 @@ import ru.ov4innikov.social.network.post.repository.PostRepository;
 import ru.ov4innikov.social.network.user.service.UserService;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -37,12 +39,28 @@ public class BasePostService implements PostService {
 
     @Override
     public List<Post> getFeed(Long offset, Long limit) {
-        return postRepository.getFeed(offset, limit);
+        User currentUser = userService.getCurrentUser();
+        if (currentUser.getId().isEmpty()) {
+            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return Optional
+                .ofNullable(postRepository.getFeed(currentUser.getId().get()))
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(post -> new Post()
+                        .id(post.getId())
+                        .authorUserId(post.getAuthorUserId())
+                        .text(post.getText()))
+                .toList();
     }
 
     @Override
     public Post getById(String id) {
-        return postRepository.getById(id);
+        ru.ov4innikov.social.network.post.model.Post byId = postRepository.getById(id);
+        return new Post()
+                .id(byId.getId())
+                .authorUserId(byId.getAuthorUserId())
+                .text(byId.getText());
     }
 
     @Override

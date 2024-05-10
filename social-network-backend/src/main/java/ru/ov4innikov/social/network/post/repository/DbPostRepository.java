@@ -2,7 +2,6 @@ package ru.ov4innikov.social.network.post.repository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -13,9 +12,8 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import ru.ov4innikov.social.network.model.Post;
+import ru.ov4innikov.social.network.post.model.Post;
 
-import java.math.BigDecimal;
 import java.sql.Types;
 import java.util.*;
 
@@ -27,10 +25,11 @@ public class DbPostRepository implements PostRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     public static final RowMapper<Post> POST_ROW_MAPPER = (resultSet, rowNum) ->
-            new Post()
+            Post.builder()
                     .id(resultSet.getString("id"))
                     .text(resultSet.getString("text"))
-                    .authorUserId(resultSet.getString("author_user_id"));
+                    .authorUserId(resultSet.getString("author_user_id"))
+                    .build();
 
     @Override
     public String create(String authorUserId, String text) {
@@ -42,7 +41,7 @@ public class DbPostRepository implements PostRepository {
                 """;
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource paramSource = new MapSqlParameterSource();
-        paramSource.addValue("author_user_id", authorUserId, Types.VARCHAR);
+        paramSource.addValue("author_user_id", UUID.fromString(authorUserId));
         paramSource.addValue("text", text, Types.VARCHAR);
         jdbcTemplate.update(sqlQueryInsert, paramSource, keyHolder);
         return keyHolder.getKeys().get("id").toString();
@@ -60,16 +59,9 @@ public class DbPostRepository implements PostRepository {
         return updateCount > 0;
     }
 
-    @Caching(
-            cacheable = {
-                    @Cacheable(cacheNames = "feedOfFriends", sync = true, condition = "#forceUpdate==false")
-            },
-            put = {
-                    @CachePut(cacheNames = "feedOfFriends", condition = "#forceUpdate==true")
-            }
-    )
+    @Cacheable(cacheNames = "feedOfFriends", sync = true)
     @Override
-    public List<Post> getFeed(String currentUserId, boolean forceUpdate) {
+    public List<Post> getFeed(String currentUserId) {
         if (currentUserId == null) return Collections.emptyList();
         String sqlQueryGetFeed = """
                 SELECT *
@@ -79,7 +71,24 @@ public class DbPostRepository implements PostRepository {
                 WHERE f.user_id = :currentUserId
                 LIMIT :limit
                 """;
-        Map<String, Object> mapOfParameters = Map.of("currentUserId", currentUserId, "limit", 1000);
+        Map<String, Object> mapOfParameters = Map.of("currentUserId", UUID.fromString(currentUserId), "limit", 1000);
+        SqlParameterSource namedParameters = new MapSqlParameterSource(mapOfParameters);
+        return jdbcTemplate.query(sqlQueryGetFeed, namedParameters, POST_ROW_MAPPER);
+    }
+
+    @CachePut(cacheNames = "feedOfFriends")
+    @Override
+    public List<Post> getFeedForce(String currentUserId) {
+        if (currentUserId == null) return Collections.emptyList();
+        String sqlQueryGetFeed = """
+                SELECT *
+                FROM sc.friend f
+                JOIN sc.post p
+                ON f.friend_user_id = p.author_user_id
+                WHERE f.user_id = :currentUserId
+                LIMIT :limit
+                """;
+        Map<String, Object> mapOfParameters = Map.of("currentUserId", UUID.fromString(currentUserId), "limit", 1000);
         SqlParameterSource namedParameters = new MapSqlParameterSource(mapOfParameters);
         return jdbcTemplate.query(sqlQueryGetFeed, namedParameters, POST_ROW_MAPPER);
     }

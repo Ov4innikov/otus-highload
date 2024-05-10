@@ -23,9 +23,10 @@ public class ControllerAspect {
         log.info("Closing context. Counters state is {}", methodsCounter);
     }
 
-    @Around(value = "@within(org.springframework.stereotype.Controller) || @annotation(org.springframework.stereotype.Controller)")
+    @Around(value = "@within(org.springframework.stereotype.Controller) || @annotation(org.springframework.stereotype.Controller) || @within(io.micrometer.observation.annotation.Observed) || @annotation(io.micrometer.observation.annotation.Observed)")
     public Object measureMethodExecutionTime(ProceedingJoinPoint pjp) throws Throwable {
-        if (!methodsCounter.containsKey(pjp.getSignature().getName())) methodsCounter.put(pjp.getSignature().getName(), new AtomicInteger(0));
+        if (!methodsCounter.containsKey(pjp.getSignature().getName()))
+            methodsCounter.put(pjp.getSignature().getName(), new AtomicInteger(0));
         log.info("Calling method {}, {}", pjp.getSignature().getName(), methodsCounter.get(pjp.getSignature().getName()).incrementAndGet());
         try {
             return pjp.proceed();

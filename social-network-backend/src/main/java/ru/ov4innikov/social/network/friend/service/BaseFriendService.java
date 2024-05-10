@@ -2,10 +2,11 @@ package ru.ov4innikov.social.network.friend.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
+import ru.ov4innikov.social.network.friend.properties.AppFriendProperties;
 import ru.ov4innikov.social.network.friend.repository.FriendRepository;
 import ru.ov4innikov.social.network.model.User;
 import ru.ov4innikov.social.network.user.service.UserService;
@@ -19,6 +20,8 @@ public class BaseFriendService implements FriendService {
 
     private final FriendRepository friendRepository;
     private final UserService userService;
+    private final RabbitTemplate rabbitTemplate;
+    private final AppFriendProperties appFriendProperties;
 
     @Override
     public List<String> getFriendIds() {
@@ -36,6 +39,7 @@ public class BaseFriendService implements FriendService {
             throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         friendRepository.addFriend(currentUser.getId().get(), friendUserId);
+        rabbitTemplate.convertAndSend(appFriendProperties.getFriendChangingExchange(), appFriendProperties.getFriendChangingRoutingKey(), currentUser.getId().get());
     }
 
     @Override
@@ -45,5 +49,6 @@ public class BaseFriendService implements FriendService {
             throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         friendRepository.deleteFriend(currentUser.getId().get(), friendUserId);
+        rabbitTemplate.convertAndSend(appFriendProperties.getFriendChangingExchange(), appFriendProperties.getFriendChangingRoutingKey(), currentUser.getId().get());
     }
 }

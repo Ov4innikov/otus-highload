@@ -9,6 +9,10 @@ spring:
         pattern: "%h %{X-Forwarded-For}i %l %u %t \"%r\" %>s %b"
     error:
       include-stacktrace: on_trace_param
+  rabbitmq:
+    username: user
+    password: user
+    addresses: rabbitmq
   config:
     import:
       configserver: http://configserver:8888
@@ -29,6 +33,8 @@ spring:
     default-property-inclusion: non_null
     serialization:
       write-dates-as-timestamps: false
+    deserialization:
+      adjust-dates-to-context-time-zone: false
   lifecycle:
     timeout-per-shutdown-phase: 1m
   application:
@@ -40,6 +46,8 @@ spring:
     change-log: liquibase/changeLog.xml
   cache:
     type: redis
+    redis:
+      time-to-live: 3600000 #1 hour
   data:
     redis:
       url: redis://redis@localhost:6379
@@ -97,6 +105,15 @@ springdoc:
 #      paths-to-match:
 #        - /actuator
 #        - /actuator/*
+app:
+  post:
+    friendChangingQueue: friendChanging
+    friendChangingExchange: friendChanging
+    friendChangingRoutingKey: friendChanging
+  friend:
+    friendChangingQueue: friendChangingQueue
+    friendChangingExchange: friendChanging
+    friendChangingRoutingKey: friendChanging
 
 ---
 

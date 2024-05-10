@@ -1,8 +1,19 @@
 version: '3'
 
 services:
+  rabbitmq:
+    image: 'bitnami/rabbitmq:latest'
+    container_name: rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    environment:
+      - RABBITMQ_MANAGEMENT_ALLOW_WEB_ACCESS=true
+      - RABBITMQ_USERNAME=user
+      - RABBITMQ_PASSWORD=user
   redis:
     image: 'bitnami/redis:latest'
+    container_name: redis
     restart: always
     ports:
       - "6379:6379"
