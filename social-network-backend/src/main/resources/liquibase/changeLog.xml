@@ -72,5 +72,31 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <createIndex schemaName="sc" tableName="post" indexName="post_author_user_id" unique="true">
+            <column name="author_user_id"/>
+        </createIndex>
+        <rollback>
+            <dropIndex schemaName="sc" tableName="post" indexName="post_author_user_id"/>
+            <dropTable schemaName="sc" tableName="post"/>
+        </rollback>
+
+        <createTable schemaName="sc" tableName="friend">
+            <column name="row_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="friend_user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex schemaName="sc" tableName="friend" indexName="friend_user_id_hash_indx">
+            <column name="user_id"/>
+        </createIndex>
+        <rollback>
+            <dropIndex schemaName="sc" tableName="friend" indexName="friend_user_id_hash_indx"/>
+            <dropTable schemaName="sc" tableName="friend"/>
+        </rollback>
     </changeSet>
 </databaseChangeLog>

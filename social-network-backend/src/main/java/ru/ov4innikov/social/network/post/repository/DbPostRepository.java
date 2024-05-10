@@ -2,6 +2,10 @@ package ru.ov4innikov.social.network.post.repository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -13,9 +17,7 @@ import ru.ov4innikov.social.network.model.Post;
 
 import java.math.BigDecimal;
 import java.sql.Types;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -56,6 +58,30 @@ public class DbPostRepository implements PostRepository {
         paramSource.addValue("id", UUID.fromString(id));
         int updateCount = jdbcTemplate.update(sqlQueryDelete, paramSource);
         return updateCount > 0;
+    }
+
+    @Caching(
+            cacheable = {
+                    @Cacheable(cacheNames = "feedOfFriends", sync = true, condition = "#forceUpdate==false")
+            },
+            put = {
+                    @CachePut(cacheNames = "feedOfFriends", condition = "#forceUpdate==true")
+            }
+    )
+    @Override
+    public List<Post> getFeed(String currentUserId, boolean forceUpdate) {
+        if (currentUserId == null) return Collections.emptyList();
+        String sqlQueryGetFeed = """
+                SELECT *
+                FROM sc.friend f
+                JOIN sc.post p
+                ON f.friend_user_id = p.author_user_id
+                WHERE f.user_id = :currentUserId
+                LIMIT :limit
+                """;
+        Map<String, Object> mapOfParameters = Map.of("currentUserId", currentUserId, "limit", 1000);
+        SqlParameterSource namedParameters = new MapSqlParameterSource(mapOfParameters);
+        return jdbcTemplate.query(sqlQueryGetFeed, namedParameters, POST_ROW_MAPPER);
     }
 
     @Override

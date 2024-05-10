@@ -1,5 +1,6 @@
 package ru.ov4innikov.social.network.user.service;
 
+import org.springframework.http.ResponseEntity;
 import ru.ov4innikov.social.network.model.*;
 
 import java.util.List;

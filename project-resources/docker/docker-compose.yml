@@ -1,6 +1,19 @@
 version: '3'
 
 services:
+  redis:
+    image: 'bitnami/redis:latest'
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/data:/bitnami/redis/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_USERNAME=redis
+      - REDIS_PASSWORD=redis
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
   postgres-master:
     image: 'bitnami/postgresql:16'
     container_name: postgres-master
@@ -62,6 +75,7 @@ services:
       spring.datasource.url: jdbc:postgresql://postgres-master:5432/postgres
       spring.datasource.username: postgres
       spring.datasource.password: postgres
+      spring.data.redis.url: redis://redis@redis:6379
 
 networks:
   default:

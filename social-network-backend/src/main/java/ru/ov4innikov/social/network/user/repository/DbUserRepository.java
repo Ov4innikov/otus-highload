@@ -71,7 +71,7 @@ public class DbUserRepository implements UserRepository {
         return keyHolder.getKeys().get("id").toString();
     }
 
-    @Cacheable("userGetById")
+    @Cacheable(cacheNames = "userGetById", key = "#id")
     @Override
     public User getById(String id) {
         return jdbcTemplate.queryForObject(

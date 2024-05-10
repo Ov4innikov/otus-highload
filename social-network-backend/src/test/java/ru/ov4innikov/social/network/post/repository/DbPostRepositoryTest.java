@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -15,37 +17,25 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import ru.ov4innikov.social.network.common.config.TestContainersConfig;
 import ru.ov4innikov.social.network.model.Post;
+import ru.ov4innikov.social.network.model.UserRegisterPostRequest;
+import ru.ov4innikov.social.network.user.repository.UserRepository;
+import ru.ov4innikov.social.network.user.service.UserService;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @Log4j2
-@Testcontainers
+@DirtiesContext
 @SpringBootTest
-class DbPostRepositoryTest {
+class DbPostRepositoryTest extends TestContainersConfig {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     private PostRepository postRepository;
-
-    @Container
-    @ServiceConnection
-    public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest")
-            .withReuse(true)
-            .withDatabaseName("postgres");
-
-    @DynamicPropertySource
-    static void datasourceProperties(DynamicPropertyRegistry registry) {
-        log.info("Url = {}", postgreSQLContainer::getJdbcUrl);
-        log.info("Password = {}", postgreSQLContainer::getPassword);
-        log.info("Username = {}", postgreSQLContainer::getUsername);
-        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
-        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
-        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
-    }
 
     @BeforeEach
     void setUp() {
@@ -59,6 +49,7 @@ class DbPostRepositoryTest {
 
     @Test
     public void test_saveAndGet_positive() throws JsonProcessingException {
+        //execute and checks
         final String postIdOfUser1 = postRepository.create("userId1", "Hello");
         final String postIdOfUser2 = postRepository.create("userId2", "Hi");
         List<Post> feed = postRepository.getFeed(0L, 100L);

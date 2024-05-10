@@ -38,6 +38,12 @@ spring:
       enabled: false
   liquibase:
     change-log: liquibase/changeLog.xml
+  cache:
+    type: redis
+  data:
+    redis:
+      url: redis://redis@localhost:6379
+      client-name: SocialNetworkBackendApplication
 
 management:
   endpoints:
