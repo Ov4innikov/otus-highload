@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -69,6 +68,7 @@ public class DbPostRepository implements PostRepository {
                 JOIN sc.post p
                 ON f.friend_user_id = p.author_user_id
                 WHERE f.user_id = :currentUserId
+                ORDER BY p.row_id DESC
                 LIMIT :limit
                 """;
         Map<String, Object> mapOfParameters = Map.of("currentUserId", UUID.fromString(currentUserId), "limit", 1000);
@@ -86,6 +86,7 @@ public class DbPostRepository implements PostRepository {
                 JOIN sc.post p
                 ON f.friend_user_id = p.author_user_id
                 WHERE f.user_id = :currentUserId
+                ORDER BY p.row_id DESC
                 LIMIT :limit
                 """;
         Map<String, Object> mapOfParameters = Map.of("currentUserId", UUID.fromString(currentUserId), "limit", 1000);
