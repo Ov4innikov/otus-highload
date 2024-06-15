@@ -36,7 +36,7 @@
         <appender-ref ref="Console"/>
     </root>
 
-    <logger name="ru.ov4innikov" level="debug" additivity="false">
+    <logger name="ru.ov4innikov" level="trace" additivity="false">
         <appender-ref ref="Console"/>
     </logger>
     <logger name="org.springframework" level="info" additivity="false">
@@ -45,5 +45,10 @@
     <logger name="org.springframework.jdbc" level="info" additivity="false">
         <appender-ref ref="Console"/>
     </logger>
-
+    <logger name="org.springframework.amqp.core" level="debug" additivity="false">
+        <appender-ref ref="Console"/>
+    </logger>
+    <logger name="org.springframework.cloud.stream" level="trace" additivity="false">
+        <appender-ref ref="Console"/>
+    </logger>
 </configuration>

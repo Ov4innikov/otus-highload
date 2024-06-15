@@ -20,6 +20,31 @@ spring:
   cloud:
     config:
       enabled: false
+    function:
+      definition: friendsChangingListener,friendsPostChangingListener;postFeedPosted
+    stream:
+#      rabbit:
+#        binder:
+#          admin-addresses: l
+      #      output-bindings: friendsPostChangingListener
+      bindings:
+        friendsChangingListener-in-0:
+          destination: friendsChangingListenerQueue
+          binder: rabbit
+          consumer:
+            auto-startup: true
+            max-attempts: 4
+        friendsPostChangingListener-in-0:
+          destination: friendsPostChangingListenerQueue
+          binder: rabbit
+          consumer:
+            auto-startup: true
+            max-attempts: 4
+        postFeedPosted-out-0:
+          destination: post-create
+          producer:
+            auto-startup: true
+
   datasource:
     hikari:
       maximum-pool-size: 50
@@ -107,12 +132,12 @@ springdoc:
 #        - /actuator/*
 app:
   post:
-    friendChangingQueue: friendChanging
-    friendChangingExchange: friendChanging
+    friendChangingQueue: friendsChangingListenerQueue
+    friendChangingExchange: friendsChangingListenerQueue
     friendChangingRoutingKey: friendChanging
   friend:
-    friendChangingQueue: friendChangingQueue
-    friendChangingExchange: friendChanging
+    friendChangingQueue: friendsChangingListenerQueue
+    friendChangingExchange: friendsChangingListenerQueue
     friendChangingRoutingKey: friendChanging
 
 ---
@@ -121,6 +146,8 @@ spring:
   config:
     activate:
       on-profile: test
+  rabbitmq:
+    addresses: localhost
 
 tracing:
   url: http://10.97.141.31:30317/sampling

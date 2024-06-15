@@ -2,6 +2,7 @@ package ru.ov4innikov.social.network.post.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
@@ -10,7 +11,6 @@ import ru.ov4innikov.social.network.model.User;
 import ru.ov4innikov.social.network.post.repository.PostRepository;
 import ru.ov4innikov.social.network.user.service.UserService;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +22,7 @@ public class BasePostService implements PostService {
 
     private final PostRepository postRepository;
     private final UserService userService;
+    private final StreamBridge streamBridge;
 
     @Override
     public String create(String text) {
@@ -29,7 +30,9 @@ public class BasePostService implements PostService {
         if (currentUser.getId().isEmpty()) {
             throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return postRepository.create(currentUser.getId().get(), text);
+        String postId = postRepository.create(currentUser.getId().get(), text);
+        streamBridge.send("friendsPostChangingListenerQueue", postId);
+        return postId;
     }
 
     @Override

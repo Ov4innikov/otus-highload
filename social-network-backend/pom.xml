@@ -23,7 +23,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring-cloud.version>2023.0.0</spring-cloud.version>
+        <spring-cloud.version>2023.0.2</spring-cloud.version>
         <opentracing-spring-jaeger-starter.version>3.3.1</opentracing-spring-jaeger-starter.version>
         <springdoc.version>1.6.15</springdoc.version>
 
@@ -34,9 +34,14 @@
             ${openapi.dir}/openapi-social-network.json
         </openapi.social.network.file>
 
-        <openapi.social.network.package>
+        <asyncapi.dir>${project.basedir}/src/main/resources/asyncapi</asyncapi.dir>
+        <asyncapi.social.network.file>
+            ${asyncapi.dir}/asyncapi-social-network.json
+        </asyncapi.social.network.file>
+        
+        <api.social.network.package>
             ru.ov4innikov.social.network
-        </openapi.social.network.package>
+        </api.social.network.package>
     </properties>
 
     <dependencyManagement>
@@ -96,6 +101,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
         </dependency>
 
         <dependency>
@@ -183,6 +196,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-test-support</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-testcontainers</artifactId>
             <scope>test</scope>
@@ -202,6 +220,11 @@
             <artifactId>testcontainers-redis-junit-jupiter</artifactId>
             <version>1.4.6</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sngular</groupId>
+            <artifactId>scs-multiapi-maven-plugin</artifactId>
+            <version>5.4.2</version>
         </dependency>
         <!--        <dependency>-->
         <!--            <groupId>org.testcontainers</groupId>-->
@@ -315,8 +338,8 @@
                         <configuration>
                             <output>${project.build.directory}/generated-sources/social-network-service</output>
                             <inputSpec>${openapi.social.network.file}</inputSpec>
-                            <apiPackage>${openapi.social.network.package}.api.server</apiPackage>
-                            <modelPackage>${openapi.social.network.package}.model</modelPackage>
+                            <apiPackage>${api.social.network.package}.api.server</apiPackage>
+                            <modelPackage>${api.social.network.package}.model</modelPackage>
                             <generateApiDocumentation>true</generateApiDocumentation>
                             <generateModelDocumentation>false</generateModelDocumentation>
                             <generateApiTests>true</generateApiTests>
@@ -353,9 +376,9 @@
                         <configuration>
                             <output>${project.build.directory}/generated-sources/social-network-service</output>
                             <inputSpec>${openapi.social.network.file}</inputSpec>
-                            <apiPackage>${openapi.social.network.package}.api.client</apiPackage>
-                            <modelPackage>${openapi.social.network.package}.model</modelPackage>
-                            <invokerPackage>${openapi.social.network.package}.invoker</invokerPackage>
+                            <apiPackage>${api.social.network.package}.api.client</apiPackage>
+                            <modelPackage>${api.social.network.package}.model</modelPackage>
+                            <invokerPackage>${api.social.network.package}.invoker</invokerPackage>
                             <generateModels>false</generateModels>
                             <generateApiDocumentation>false</generateApiDocumentation>
                             <generateModelDocumentation>false</generateModelDocumentation>
@@ -384,6 +407,33 @@
                                 <importMapping>OffsetDateTime=java.time.OffsetDateTime</importMapping>
                                 <importMapping>BigDecimal=java.math.BigDecimal</importMapping>
                             </importMappings>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.sngular</groupId>
+                <artifactId>scs-multiapi-maven-plugin</artifactId>
+                <version>5.4.2</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>asyncapi-generation</goal>
+                        </goals>
+                        <configuration>
+                            <specFiles>
+                                <specFile>
+                                    <filePath>${asyncapi.social.network.file}</filePath>
+                                    <supplier>
+                                        <ids>postFeedPosted</ids>
+                                        <apiPackage>${api.social.network.package}.async.post.producer</apiPackage>
+                                        <modelPackage>${api.social.network.package}.async.post.model</modelPackage>
+                                    </supplier>
+                                </specFile>
+                            </specFiles>
+                            <generatedSourcesFolder>generated-sources</generatedSourcesFolder>
+                            <springBootVersion>3</springBootVersion>
                         </configuration>
                     </execution>
                 </executions>

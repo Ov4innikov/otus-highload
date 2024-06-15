@@ -29,7 +29,12 @@ public class BaseFriendService implements FriendService {
         if (currentUser.getId().isEmpty()) {
             throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return friendRepository.getFriendIds(currentUser.getId().get());
+        return getFriendIds(currentUser.getId().get());
+    }
+
+    @Override
+    public List<String> getFriendIds(String userId) {
+        return friendRepository.getFriendIds(userId);
     }
 
     @Override

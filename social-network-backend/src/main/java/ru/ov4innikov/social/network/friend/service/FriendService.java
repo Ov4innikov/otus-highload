@@ -8,6 +8,8 @@ public interface FriendService {
 
     List<String> getFriendIds();
 
+    List<String> getFriendIds(String userId);
+
     void addFriend(String friendUserId);
 
     void deleteFriend(String friendUserId);
