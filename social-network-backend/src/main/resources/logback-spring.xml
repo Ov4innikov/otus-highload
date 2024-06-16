@@ -51,4 +51,10 @@
     <logger name="org.springframework.cloud.stream" level="trace" additivity="false">
         <appender-ref ref="Console"/>
     </logger>
+    <logger name="org.springframework.web.socket" level="trace" additivity="false">
+        <appender-ref ref="Console"/>
+    </logger>
+    <logger name="org.springframework.security.web" level="debug" additivity="false">
+        <appender-ref ref="Console"/>
+    </logger>
 </configuration>

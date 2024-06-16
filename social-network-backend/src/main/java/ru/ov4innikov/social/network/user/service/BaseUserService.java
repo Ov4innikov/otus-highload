@@ -1,6 +1,5 @@
 package ru.ov4innikov.social.network.user.service;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,7 +48,7 @@ public class BaseUserService implements UserService {
 
     @Override
     public ru.ov4innikov.social.network.model.User getCurrentUser() {
-        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        var username = SecurityContextHolder.getContextHolderStrategy().getContext().getAuthentication().getName();
         return getById(username);
     }
 

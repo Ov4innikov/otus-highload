@@ -11,7 +11,7 @@ public class WsPostFeedPosted implements IPostFeedPosted {
 
     @Override
     public Post postFeedPosted() {
-//        log.trace("postFeedPosted");
+        log.trace("postFeedPosted");
         return null;
     }
 }

@@ -21,7 +21,7 @@ spring:
     config:
       enabled: false
     function:
-      definition: friendsChangingListener,friendsPostChangingListener;postFeedPosted
+      definition: friendsChangingListener;friendsPostChangingListener
     stream:
 #      rabbit:
 #        binder:
@@ -40,10 +40,6 @@ spring:
           consumer:
             auto-startup: true
             max-attempts: 4
-        postFeedPosted-out-0:
-          destination: post-create
-          producer:
-            auto-startup: true
 
   datasource:
     hikari:
